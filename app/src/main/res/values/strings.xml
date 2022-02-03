@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Sport Tracker</string>
+    <string name="bottom_navigation_menu_tracker">Suivi</string>
+    <string name="bottom_nagigation_menu_home">Accueil</string>
+    <string name="bottom_nagigation_menu_profile">Profil</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment_2">Hello blank fragment 1</string>
+    <string name="hello_blank_fragment_1">Hello blank fragment 2</string>
+
 </resources>
