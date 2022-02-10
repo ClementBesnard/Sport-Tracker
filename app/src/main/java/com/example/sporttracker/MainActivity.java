@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setSelectedItemId(R.id.activity);
     }
 
     HomeFragment homeFragment = new HomeFragment();
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.home:
+            case R.id.activity:
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragment, homeFragment).commit();
                 return true;
             case R.id.profile:

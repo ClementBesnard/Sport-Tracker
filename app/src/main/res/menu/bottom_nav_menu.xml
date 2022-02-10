@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
-        android:title="@string/bottom_nagigation_menu_home"
-        android:icon="@drawable/home_foreground"/>
+        android:id="@+id/activity"
+        android:title="@string/bottom_navigation_menu_activity"
+        android:icon="@drawable/activity_foreground"/>
 
     <item
         android:id="@+id/profile"
