@@ -2,6 +2,7 @@
     <string name="app_name">Sport Tracker</string>
     <string name="bottom_navigation_menu_activity">Activité</string>
     <string name="bottom_nagigation_menu_profile">Profil</string>
+    <string name="maps_api_key">AIzaSyDDe498SX4dhJQSnnjmYlPrUAVyxgF7d0Y</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment_2">Hello blank fragment 1</string>
