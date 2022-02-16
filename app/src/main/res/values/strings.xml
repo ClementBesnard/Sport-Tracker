@@ -7,5 +7,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment_2">Hello blank fragment 1</string>
     <string name="hello_blank_fragment_1">Hello blank fragment 2</string>
+    <string name="timeText">Time</string>
+    <string name="topScrollView">topScrollView</string>
+    <string name="time">Durée</string>
+    <string name="distance">Distance</string>
+    <string name="rythme">Rythme (min/km)</string>
+    <string name="calories">Calories (kcal)</string>
+    <string name="start">Lancer</string>
 
 </resources>

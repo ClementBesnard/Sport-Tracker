@@ -232,11 +232,4 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
 }
