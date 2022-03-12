@@ -3,8 +3,14 @@ package com.example.sporttracker;
 
 import static android.content.ContentValues.TAG;
 
+import static java.lang.Math.round;
+
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,11 +20,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.TextView;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,8 +37,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,14 +72,25 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private boolean locationPermissionGranted;
     private Location lastKnownLocation;
+    private List<LatLng> locationList;
 
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
     private Parcelable cameraPosition;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationManager locationManager;
+    private Chronometer time;
+    private double distance;
+    private int locationChangeCounter;
+    private TextView distanceView;
+    private TextView calories;
+    private Button RunButton;
+    private Boolean tracking;
+    private TextView rhythmView;
 
-
+    private RunningDbHelper runningDbHelper;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -96,9 +125,25 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
         }
 
+        this.locationList = new ArrayList<>();
+        tracking = Boolean.FALSE;
+        distance = 0;
+        locationChangeCounter = 0;
+
+        this.runningDbHelper = new RunningDbHelper(getContext());
+        SQLiteDatabase database = runningDbHelper.getReadableDatabase();
+        // TEST
+        runningDbHelper.createProfile(new Profile());
+
+
         // Construct a FusedLocationProviderClient.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         // Retrieve location and camera position from saved instance state.
+
+        locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
+                0,
+                1, locationListenerGPS);
 
 
 
@@ -118,12 +163,92 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         assert mapFragment != null;
         mapFragment.getMapAsync((OnMapReadyCallback) this);
+
+        time = requireView().findViewById(R.id.time);
+        distanceView = requireView().findViewById(R.id.distance);
+        calories = requireView().findViewById(R.id.calories);
+        rhythmView = requireView().findViewById(R.id.rhythm);
+        RunButton = requireView().findViewById(R.id.startRun);
+
+        time.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+
+            @Override
+
+            public void onChronometerTick(Chronometer chronometer) {
+                long elapsedMillis = SystemClock.elapsedRealtime() - time.getBase();
+                Log.d("P1", String.valueOf((elapsedMillis / 60000d)));
+                Log.d("P2", String.valueOf(distance));
+
+                Log.d("rythme1", String.valueOf((elapsedMillis / 60000d) / distance));
+                // Minutes divided by kilometer
+                rhythmView.setText(MessageFormat.format("{0}", (elapsedMillis / 60000d) / distance));
+            }
+
+        });
     }
+
+    public void startRun(View view) {
+        long elapsedRealtime = SystemClock.elapsedRealtime();
+        switch (view.getId()){
+            case R.id.startRun:
+                time.setBase(elapsedRealtime);
+                time.start();
+                tracking = Boolean.TRUE;
+                RunButton.setText(R.string.stop);
+                RunButton.setId(R.id.stopRun);
+                break;
+            case R.id.stopRun:
+                time.stop();
+                time.setBase(elapsedRealtime);
+                tracking = Boolean.FALSE;
+                distance = 0;
+                locationChangeCounter = 0;
+                distanceView.setText(MessageFormat.format("{0} km", Integer.toString((int) distance)));
+                rhythmView.setText("00:00");
+                RunButton.setText(R.string.start);
+                RunButton.setId(R.id.startRun);
+                break;
+        }
+
+    }
+
+    private static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(Double.toString(value));
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+
+    LocationListener locationListenerGPS=new LocationListener() {
+        @Override
+        public void onLocationChanged(android.location.Location location) {
+            if (tracking){
+                getDeviceLocation();
+                distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
 
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         this.map = map;
-
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -133,7 +258,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
     }
+
 
     private void getLocationPermission() {
         /*
@@ -171,6 +298,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void updateLocationUI() {
+
         if (map == null) {
             return;
         }
@@ -178,6 +306,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             if (locationPermissionGranted) {
                 map.setMyLocationEnabled(true);
                 map.getUiSettings().setMyLocationButtonEnabled(true);
+
             } else {
                 map.setMyLocationEnabled(false);
                 map.getUiSettings().setMyLocationButtonEnabled(false);
@@ -202,10 +331,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
                         if (lastKnownLocation != null) {
-                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    new LatLng(lastKnownLocation.getLatitude(),
-                                            lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                            //        new LatLng(lastKnownLocation.getLatitude(),
+                            //                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+
+
+                            locationList.add(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()));
+                            if (locationList.size() > 1){
+                                Log.d("LAT1", String.valueOf(this.locationList.get(locationList.size() - 1).latitude));
+                                Log.d("LON1", String.valueOf(this.locationList.get(locationList.size() - 1).longitude));
+
+                                Log.d("LAT2", String.valueOf(this.locationList.get(locationList.size() - 2).latitude));
+                                Log.d("LON2", String.valueOf(this.locationList.get(locationList.size() - 2).longitude));
+                                map.addPolyline(new PolylineOptions()
+                                        .add(
+                                                this.locationList.get(locationList.size() - 1),
+                                                this.locationList.get(locationList.size() - 2)));
+                                Location P1 = new Location("P1");
+                                P1.setLatitude(this.locationList.get(locationList.size() - 1).latitude);
+                                P1.setLongitude(this.locationList.get(locationList.size() - 1).longitude);
+
+                                Location P2 = new Location("P2");
+                                P2.setLatitude(this.locationList.get(locationList.size() - 2).latitude);
+                                P2.setLongitude(this.locationList.get(locationList.size() - 2).longitude);
+
+                                double meters = P1.distanceTo(P2);
+                                distance+= meters / 1000d;
+                            }
+
                         }
+
+
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.");
                         Log.e(TAG, "Exception: %s", task.getException());
@@ -228,8 +384,5 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
         super.onSaveInstanceState(outState);
     }
-
-
-
 
 }
