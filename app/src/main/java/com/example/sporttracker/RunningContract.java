@@ -74,8 +74,8 @@ public final class RunningContract {
 
     public static class Activity implements BaseColumns {
         public static final String TABLE_NAME = "activity";
-        public static final String COLUMN_NAME_DURATION = "duration";
-        public static final String COLUMN_NAME_DISTANCE = "distance";
+        public static final String COLUMN_NAME_DURATION = "duration"; // seconds
+        public static final String COLUMN_NAME_DISTANCE = "distance"; // kilometers
         public static final String COLUMN_NAME_CALORIES = "calories";
         public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_PROFILE_ID = "profileId";

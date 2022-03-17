@@ -52,9 +52,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -144,9 +149,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationChangeCounter = 0;
 
         this.runningDbHelper = new RunningDbHelper(getContext());
-        SQLiteDatabase database = runningDbHelper.getReadableDatabase();
-        // TEST
-        runningDbHelper.createProfile(new Profile());
 
 
         // Construct a FusedLocationProviderClient.
@@ -253,6 +255,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 RunButton.setId(R.id.stopRun);
                 break;
             case R.id.stopRun:
+                Date date = new Date();
+                Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
+                Activity activity = new Activity(duration, distance, 0, date, 0, 0);
+                runningDbHelper.addNewActivity(activity);
+
                 time.stop();
                 time.setBase(elapsedRealtime);
                 tracking = Boolean.FALSE;
@@ -268,6 +275,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 for (Polyline polyline : polylines ) {
                     polyline.remove();
                 }
+
                 break;
         }
 

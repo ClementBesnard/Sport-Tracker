@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
-<<<<<<< HEAD
 import android.widget.TextView;
-=======
 import android.view.View;
->>>>>>> 8537b226ebcd40b31456bd852207ed351f4fc4ef
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
