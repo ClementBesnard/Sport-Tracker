@@ -14,7 +14,11 @@
     <string name="rythme">Rythme (min/km)</string>
     <string name="calories">Calories (kcal)</string>
     <string name="start">Lancer</string>
+<<<<<<< HEAD
     <string name="todo">TODO</string>
     <string name="profile">Profile</string>
+=======
+    <string name="stop">Arreter</string>
+>>>>>>> 8537b226ebcd40b31456bd852207ed351f4fc4ef
 
 </resources>
