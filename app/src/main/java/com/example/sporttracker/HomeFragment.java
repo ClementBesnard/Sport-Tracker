@@ -5,19 +5,26 @@ import static android.content.ContentValues.TAG;
 
 import static java.lang.Math.round;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -37,6 +44,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 
@@ -46,6 +54,7 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,6 +100,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private TextView rhythmView;
 
     private RunningDbHelper runningDbHelper;
+
+    private List<Polyline> polylines;
+
+    private Context context;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -140,15 +153,52 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         // Retrieve location and camera position from saved instance state.
 
-        locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
-                0,
-                1, locationListenerGPS);
+        context = getContext();
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(mMessageReceiver, new IntentFilter("intentKey"));
 
-
+        polylines = new ArrayList<>();
 
 
     }
+
+    private final BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            double lat = intent.getDoubleExtra("lat", 0d);
+            double lon = intent.getDoubleExtra("lon", 0d);
+            locationList.add(new LatLng(lat, lon));
+            if (locationList.size() > 1){
+                Log.d("LAT1", String.valueOf(locationList.get(locationList.size() - 1).latitude));
+                Log.d("LON1", String.valueOf(locationList.get(locationList.size() - 1).longitude));
+
+                Log.d("LAT2", String.valueOf(locationList.get(locationList.size() - 2).latitude));
+                Log.d("LON2", String.valueOf(locationList.get(locationList.size() - 2).longitude));
+
+                Polyline polyline = map.addPolyline(new PolylineOptions()
+                        .add(
+                                locationList.get(locationList.size() - 1),
+                                locationList.get(locationList.size() - 2)));
+
+                polylines.add(polyline);
+                Location P1 = new Location("P1");
+                P1.setLatitude(locationList.get(locationList.size() - 1).latitude);
+                P1.setLongitude(locationList.get(locationList.size() - 1).longitude);
+
+                Location P2 = new Location("P2");
+                P2.setLatitude(locationList.get(locationList.size() - 2).latitude);
+                P2.setLongitude(locationList.get(locationList.size() - 2).longitude);
+
+                double meters = P1.distanceTo(P2);
+                distance+= meters / 1000d;
+                distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
+
+            }
+
+        }
+    };
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -187,10 +237,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void startRun(View view) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
         switch (view.getId()){
             case R.id.startRun:
+                Intent intent = new Intent(requireActivity(), LocationService.class);
+                intent.setAction("start");
+                context.startForegroundService(intent);
+
                 time.setBase(elapsedRealtime);
                 time.start();
                 tracking = Boolean.TRUE;
@@ -207,6 +262,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 rhythmView.setText("00:00");
                 RunButton.setText(R.string.start);
                 RunButton.setId(R.id.startRun);
+                Intent intentStop = new Intent(requireActivity(), LocationService.class);
+                intentStop.setAction("stop");
+                context.startForegroundService(intentStop);
+                for (Polyline polyline : polylines ) {
+                    polyline.remove();
+                }
                 break;
         }
 
@@ -221,31 +282,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    LocationListener locationListenerGPS=new LocationListener() {
-        @Override
-        public void onLocationChanged(android.location.Location location) {
-            if (tracking){
-                getDeviceLocation();
-                distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
-            }
-        }
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-        }
-
-        @Override
-        public void onProviderEnabled(String provider) {
-
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {
-
-        }
-    };
-
     @Override
     public void onMapReady(@NonNull GoogleMap map) {
         this.map = map;
@@ -258,6 +294,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        this.map.getMyLocation();
+
 
     }
 
@@ -343,10 +382,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                                 Log.d("LAT2", String.valueOf(this.locationList.get(locationList.size() - 2).latitude));
                                 Log.d("LON2", String.valueOf(this.locationList.get(locationList.size() - 2).longitude));
-                                map.addPolyline(new PolylineOptions()
+                                Polyline polyline = map.addPolyline(new PolylineOptions()
                                         .add(
                                                 this.locationList.get(locationList.size() - 1),
                                                 this.locationList.get(locationList.size() - 2)));
+                                polylines.add(polyline);
                                 Location P1 = new Location("P1");
                                 P1.setLatitude(this.locationList.get(locationList.size() - 1).latitude);
                                 P1.setLongitude(this.locationList.get(locationList.size() - 1).longitude);
