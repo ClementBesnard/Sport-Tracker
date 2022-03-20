@@ -2,18 +2,19 @@ package com.example.sporttracker;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.text.format.DateFormat;
+import android.provider.BaseColumns;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RunningDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "Running.db";
 
     public RunningDbHelper(Context context) {
@@ -67,6 +68,83 @@ public class RunningDbHelper extends SQLiteOpenHelper {
 
         long newRowId = sqLiteDatabase.insert(RunningContract.Activity.TABLE_NAME, null, values);
 
+
+    }
+
+    public long addNewUser(User user){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(RunningContract.Profile.COLUMN_NAME_FIRSTNAME, user.getFirstName());
+        values.put(RunningContract.Profile.COLUMN_NAME_LASTNAME, user.getLastName());
+        values.put(RunningContract.Profile.COLUMN_NAME_PASSWORD, user.getPassword());
+        values.put(RunningContract.Profile.COLUMN_NAME_HEIGHT, user.getHeight());
+        values.put(RunningContract.Profile.COLUMN_NAME_WEIGHT, user.getWeight());
+        values.put(RunningContract.Profile.COLUMN_NAME_AGE, user.getAge());
+
+
+        long newRowId = sqLiteDatabase.insert(RunningContract.Profile.TABLE_NAME, null, values);
+
+        return newRowId;
+    }
+
+    public User getUser(Integer id){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        String[] projection = {
+                BaseColumns._ID,
+                RunningContract.Profile.COLUMN_NAME_FIRSTNAME,
+                RunningContract.Profile.COLUMN_NAME_LASTNAME,
+                RunningContract.Profile.COLUMN_NAME_PASSWORD,
+                RunningContract.Profile.COLUMN_NAME_HEIGHT,
+                RunningContract.Profile.COLUMN_NAME_WEIGHT,
+                RunningContract.Profile.COLUMN_NAME_AGE,
+        };
+
+        String selection = RunningContract.Profile._ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        String sortOrder =
+                RunningContract.Profile.COLUMN_NAME_FIRSTNAME + " DESC";
+
+
+        Cursor cursor = sqLiteDatabase.query(
+            RunningContract.Profile.TABLE_NAME,   // The table to query
+            projection,             // The array of columns to return (pass null to get all)
+            selection,              // The columns for the WHERE clause
+            selectionArgs,          // The values for the WHERE clause
+            null,                   // don't group the rows
+            null,                   // don't filter by row groups
+            sortOrder               // The sort order
+            );
+
+
+        cursor.moveToFirst();
+        User user = new User(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6));
+
+        return user;
+
+
+    }
+
+    public List<User> getUsers(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+
+        Cursor cursor = sqLiteDatabase.query(
+                    RunningContract.Profile.TABLE_NAME, null, null, null, null, null, null);
+
+        List<User> users = new ArrayList<>();
+
+        while (cursor.moveToNext()){
+            User user = new User(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6));
+            users.add(user);
+        }
+
+        cursor.close();
+
+        return users;
 
     }
 }

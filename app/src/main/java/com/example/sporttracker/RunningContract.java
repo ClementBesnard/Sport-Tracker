@@ -9,6 +9,7 @@ public final class RunningContract {
         public static final String TABLE_NAME = "profile";
         public static final String COLUMN_NAME_FIRSTNAME = "firstname";
         public static final String COLUMN_NAME_LASTNAME = "lastname";
+        public static final String COLUMN_NAME_PASSWORD = "password";
         public static final String COLUMN_NAME_HEIGHT = "height";
         public static final String COLUMN_NAME_WEIGHT = "weight";
         public static final String COLUMN_NAME_AGE = "age";
@@ -18,6 +19,7 @@ public final class RunningContract {
                         Profile._ID + " INTEGER PRIMARY KEY," +
                         Profile.COLUMN_NAME_FIRSTNAME + " TEXT," +
                         Profile.COLUMN_NAME_LASTNAME + " TEXT," +
+                        Profile.COLUMN_NAME_PASSWORD + " TEXT," +
                         Profile.COLUMN_NAME_HEIGHT + " INTEGER," +
                         Profile.COLUMN_NAME_WEIGHT + " INTEGER," +
                         Profile.COLUMN_NAME_AGE + " INTEGER" +

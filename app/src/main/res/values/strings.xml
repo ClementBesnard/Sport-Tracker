@@ -17,5 +17,25 @@
     <string name="todo">TODO</string>
     <string name="profile">Profile</string>
     <string name="stop">Arreter</string>
+    <string name="title_activity_opening">OpeningActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="signUp">S\'inscrire</string>
+    <string name="LogIn">Se connecter</string>
+    <string name="firstname">Prénom</string>
+    <string name="lastname">Nom</string>
+    <string name="age">Age</string>
+    <string name="weight">Poids</string>
+    <string name="height">Taille</string>
+    <string name="password">Mot de passe</string>
+    <string name="submit">Valider</string>
+    <string name="loginProfile">Choisissez un profil</string>
+    <string name="back">Retour</string>
 
 </resources>
