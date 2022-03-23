@@ -246,35 +246,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             case R.id.startRun:
                 Intent intent = new Intent(requireActivity(), LocationService.class);
                 intent.setAction("start");
-                context.startForegroundService(intent);
 
                 time.setBase(elapsedRealtime);
                 time.start();
-                tracking = Boolean.TRUE;
+                context.startForegroundService(intent);
                 RunButton.setText(R.string.stop);
                 RunButton.setId(R.id.stopRun);
                 break;
             case R.id.stopRun:
+                time.stop();
+                Intent intentStop = new Intent(requireActivity(), LocationService.class);
+                intentStop.setAction("stop");
+                context.startForegroundService(intentStop);
+
                 Date date = new Date();
                 Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
                 Activity activity = new Activity(duration, distance, 0, date, 0, 0);
                 runningDbHelper.addNewActivity(activity);
 
-                time.stop();
+
                 time.setBase(elapsedRealtime);
-                tracking = Boolean.FALSE;
                 distance = 0;
-                locationChangeCounter = 0;
                 distanceView.setText(MessageFormat.format("{0} km", Integer.toString((int) distance)));
                 rhythmView.setText("00:00");
                 RunButton.setText(R.string.start);
                 RunButton.setId(R.id.startRun);
-                Intent intentStop = new Intent(requireActivity(), LocationService.class);
-                intentStop.setAction("stop");
-                context.startForegroundService(intentStop);
+
                 for (Polyline polyline : polylines ) {
                     polyline.remove();
                 }
+
+                locationList.clear();
 
                 break;
         }
@@ -378,34 +380,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
                         if (lastKnownLocation != null) {
-                            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                            //        new LatLng(lastKnownLocation.getLatitude(),
-                            //                lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
+                            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                                    new LatLng(lastKnownLocation.getLatitude(),
+                                            lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
 
 
-                            locationList.add(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()));
-                            if (locationList.size() > 1){
-                                Log.d("LAT1", String.valueOf(this.locationList.get(locationList.size() - 1).latitude));
-                                Log.d("LON1", String.valueOf(this.locationList.get(locationList.size() - 1).longitude));
 
-                                Log.d("LAT2", String.valueOf(this.locationList.get(locationList.size() - 2).latitude));
-                                Log.d("LON2", String.valueOf(this.locationList.get(locationList.size() - 2).longitude));
-                                Polyline polyline = map.addPolyline(new PolylineOptions()
-                                        .add(
-                                                this.locationList.get(locationList.size() - 1),
-                                                this.locationList.get(locationList.size() - 2)));
-                                polylines.add(polyline);
-                                Location P1 = new Location("P1");
-                                P1.setLatitude(this.locationList.get(locationList.size() - 1).latitude);
-                                P1.setLongitude(this.locationList.get(locationList.size() - 1).longitude);
-
-                                Location P2 = new Location("P2");
-                                P2.setLatitude(this.locationList.get(locationList.size() - 2).latitude);
-                                P2.setLongitude(this.locationList.get(locationList.size() - 2).longitude);
-
-                                double meters = P1.distanceTo(P2);
-                                distance+= meters / 1000d;
-                            }
 
                         }
 

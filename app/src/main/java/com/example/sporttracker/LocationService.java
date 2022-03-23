@@ -46,8 +46,9 @@ import java.util.concurrent.Executor;
 public class LocationService extends Service {
 
     public static final String TAG = LocationService.class.getSimpleName();
-    private static final long LOCATION_REQUEST_INTERVAL = 10000;
-    private static final float LOCATION_REQUEST_DISPLACEMENT = 1.0f;
+    private static final long LOCATION_REQUEST_INTERVAL = 5000;
+    private static final float LOCATION_REQUEST_DISPLACEMENT = 5.0f;
+    private static final long LOCATION_REQUEST_FASTEST_INTERVAL = 300;
 
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -75,17 +76,10 @@ public class LocationService extends Service {
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
-                super.onLocationResult(locationResult);
-                //here you get the continues location updated based on the interval defined in
-                //location request
+                Location location = locationResult.getLastLocation();
+                //Toast.makeText(getApplicationContext(), "Update", Toast.LENGTH_SHORT).show();
+                sendMessageToActivity(location.getLatitude(), location.getLongitude());
 
-                for (Location location : locationResult.getLocations()) {
-                    // Update UI with location data
-                    // ...
-                    Toast.makeText(getApplicationContext(), "Update", Toast.LENGTH_SHORT).show();
-                    sendMessageToActivity(location.getLatitude(), location.getLongitude());
-
-                }
 
             }
         };
@@ -165,6 +159,7 @@ public class LocationService extends Service {
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(LOCATION_REQUEST_INTERVAL);
+        mLocationRequest.setFastestInterval(LOCATION_REQUEST_FASTEST_INTERVAL);
         mLocationRequest.setSmallestDisplacement(LOCATION_REQUEST_DISPLACEMENT);
 
     }
