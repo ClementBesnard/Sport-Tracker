@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RunningDbHelper extends SQLiteOpenHelper {
@@ -145,6 +147,42 @@ public class RunningDbHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return users;
+
+    }
+
+    public List<Activity> getUserActivity(Integer userId) throws ParseException {
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+
+        String[] projection = {
+                BaseColumns._ID,
+                RunningContract.Activity.COLUMN_NAME_DURATION,
+                RunningContract.Activity.COLUMN_NAME_DISTANCE,
+                RunningContract.Activity.COLUMN_NAME_CALORIES,
+                RunningContract.Activity.COLUMN_NAME_DATE,
+                RunningContract.Activity.COLUMN_NAME_PROFILE_ID,
+                RunningContract.Activity.COLUMN_NAME_ITINERARY_ID
+        };
+
+        String selection = RunningContract.Activity.COLUMN_NAME_PROFILE_ID + " = ?";
+        String[] selectionArgs = {String.valueOf(userId)};
+
+        String sortOrder =
+                RunningContract.Activity.COLUMN_NAME_DATE + " ASC";
+
+        Cursor cursor = sqLiteDatabase.query(
+                RunningContract.Activity.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+
+        List<Activity> activities = new ArrayList<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+        while (cursor.moveToNext()){
+            Activity activity = new Activity(cursor.getInt(1), cursor.getDouble(2), cursor.getInt(3), dateFormat.parse(cursor.getString(4)), cursor.getInt(5), cursor.getInt(6));
+            activities.add(activity);
+        }
+
+        return activities;
 
     }
 }

@@ -44,4 +44,16 @@ public class Activity {
     public Integer getItineraryId() {
         return itineraryId;
     }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "duration=" + duration +
+                ", distance=" + distance +
+                ", calories=" + calories +
+                ", date=" + date +
+                ", profileId=" + profileId +
+                ", itineraryId=" + itineraryId +
+                '}';
+    }
 }

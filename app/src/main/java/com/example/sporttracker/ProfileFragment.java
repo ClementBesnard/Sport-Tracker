@@ -1,10 +1,15 @@
 package com.example.sporttracker;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +41,17 @@ public class ProfileFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     //Button profileBtn = (Button)getView().findViewById(R.id.plusDetails);
+
+    private RunningDbHelper runningDbHelper;
+
+    private List<Activity> activityList;
+
+    private TextView distanceActivity;
+    private TextView durationActivity;
+    private TextView dateActivity;
+    private TextView prenomActivity;
+
+    private User user;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -54,6 +78,8 @@ public class ProfileFragment extends Fragment {
 
         ImageView photoProfil;
 
+        @SuppressLint("SetTextI18n")
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -65,9 +91,84 @@ public class ProfileFragment extends Fragment {
 
             }
 
+
+            this.runningDbHelper = new RunningDbHelper(getContext());
+
+            Integer userId = ((MyApplication) requireActivity().getApplication()).getCurrentUser();
+
+            user = runningDbHelper.getUser(userId);
+
+
+            try {
+                this.activityList = runningDbHelper.getUserActivity(userId);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+
+
+
         }
 
-        @Override
+    @SuppressLint("SetTextI18n")
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        this.distanceActivity = requireView().findViewById(R.id.distanceActivity);
+        this.durationActivity = requireView().findViewById(R.id.durationActivity);
+        this.dateActivity = requireView().findViewById(R.id.dateActivity);
+        this.prenomActivity = requireView().findViewById(R.id.prenomActivity);
+
+        LocalTime timeOfDay = LocalTime.ofSecondOfDay(activityList.get(0).getDuration());
+        String time = timeOfDay.toString();
+
+        Date today = new Date();
+
+        Date date = activityList.get(0).getDate();
+
+        long difference = today.getTime() - date.getTime();
+
+        long difference_In_Seconds
+                = (difference
+                / 1000)
+                % 60;
+
+        long difference_In_Minutes
+                = (difference
+                / (1000 * 60))
+                % 60;
+
+        long difference_In_Hours
+                = (difference
+                / (1000 * 60 * 60))
+                % 24;
+
+        long difference_In_Years
+                = (difference
+                / (1000l * 60 * 60 * 24 * 365));
+
+        long difference_In_Days
+                = (difference
+                / (1000 * 60 * 60 * 24))
+                % 365;
+
+        Log.d("Activity", String.valueOf(activityList.get(0)));
+        Log.d("len", String.valueOf(activityList.size()));
+        Log.d("null ?", String.valueOf(this.distanceActivity == null));
+        this.distanceActivity.setText(HomeFragment.round(activityList.get(0).getDistance(), 2 )+ " km");
+        this.durationActivity.setText(time);
+        this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
+        this.prenomActivity.setText(user.getFirstName());
+
+
+    }
+
+    @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             // Inflate the layout for this fragment

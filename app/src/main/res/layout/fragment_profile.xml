@@ -37,7 +37,7 @@
             app:layout_constraintVertical_bias="0.564" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/distanceActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/_12_km"
@@ -49,7 +49,7 @@
             app:layout_constraintVertical_bias="0.293" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/durationActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/chrono2"
@@ -141,7 +141,7 @@
             app:layout_constraintVertical_bias="0.712" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/prenomActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/prenom"
@@ -191,7 +191,7 @@
             app:layout_constraintVertical_bias="0.703" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/dateActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/il_y_a_x_jours"

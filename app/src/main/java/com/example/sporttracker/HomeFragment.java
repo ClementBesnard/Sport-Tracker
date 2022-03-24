@@ -110,6 +110,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private User currentUser;
 
+    private Integer userId;
+
     private Context context;
     public HomeFragment() {
         // Required empty public constructor
@@ -152,7 +154,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         this.runningDbHelper = new RunningDbHelper(getContext());
 
-        Integer userId = ((MyApplication) requireActivity().getApplication()).getCurrentUser();
+        userId = ((MyApplication) requireActivity().getApplication()).getCurrentUser();
         currentUser = runningDbHelper.getUser(userId);
 
 
@@ -167,7 +169,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
-        locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+        //locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
         /*locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
                 0,
                 1, locationListenerGPS);*/
@@ -272,7 +274,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                 Date date = new Date();
                 Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
-                Activity activity = new Activity(duration, distance, 0, date, 0, 0);
+                Activity activity = new Activity(duration, distance, 0, date, userId, 0);
                 runningDbHelper.addNewActivity(activity);
 
 
@@ -294,7 +296,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    private static double round(double value, int places) {
+    public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
         BigDecimal bd = new BigDecimal(Double.toString(value));
