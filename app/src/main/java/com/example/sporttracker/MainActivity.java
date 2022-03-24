@@ -3,14 +3,12 @@ package com.example.sporttracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.MenuItem;
-<<<<<<< HEAD
-import android.widget.TextView;
-=======
 import android.view.View;
->>>>>>> 8537b226ebcd40b31456bd852207ed351f4fc4ef
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -25,12 +23,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.activity);
     }
 
     HomeFragment homeFragment = new HomeFragment();
     ProfileFragment profileFragment = new ProfileFragment();
+
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -49,4 +49,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public void startRunButton(View view) {
         homeFragment.startRun(view);
     }
+
+    public void openProfile(View view){
+        Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(i);
+    }
+
 }

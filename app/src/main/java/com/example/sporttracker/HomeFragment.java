@@ -141,9 +141,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Retrieve location and camera position from saved instance state.
 
         locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
+        /*locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
                 0,
-                1, locationListenerGPS);
+                1, locationListenerGPS);*/
 
 
 
@@ -308,7 +308,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 map.getUiSettings().setMyLocationButtonEnabled(true);
 
             } else {
-                map.setMyLocationEnabled(false);
+                //map.setMyLocationEnabled(false);
                 map.getUiSettings().setMyLocationButtonEnabled(false);
                 lastKnownLocation = null;
                 getLocationPermission();

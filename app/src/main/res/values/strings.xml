@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Sport Tracker</string>
+    <string name="profile">Mon Profil</string>
     <string name="bottom_navigation_menu_activity">Activité</string>
     <string name="bottom_nagigation_menu_profile">Profil</string>
     <string name="maps_api_key">AIzaSyDDe498SX4dhJQSnnjmYlPrUAVyxgF7d0Y</string>
@@ -14,11 +15,23 @@
     <string name="rythme">Rythme (min/km)</string>
     <string name="calories">Calories (kcal)</string>
     <string name="start">Lancer</string>
-<<<<<<< HEAD
-    <string name="todo">TODO</string>
-    <string name="profile">Profile</string>
-=======
     <string name="stop">Arreter</string>
->>>>>>> 8537b226ebcd40b31456bd852207ed351f4fc4ef
+    <string name="temps">Temps</string>
+    <string name="chrono">00:00:00</string>
+    <string name="_12_km">12 km</string>
+    <string name="chrono2">00:00:00</string>
+    <string name="activit_s_r_centes">Activités récentes</string>
+    <string name="prenom">Prenom</string>
+    <string name="btnprofil">btnProfil</string>
+    <string name="voir_plus">Voir plus</string>
+    <string name="il_y_a_x_jours">Il y a x jours</string>
+    <string name="cette_semaine">Cette semaine</string>
+    <string name="distance2">Distance</string>
+    <string name="distSemaine">0 km</string>
+    <string name="imagerunning">imageRunning</string>
+    <string name="plus_de_details">Plus de details</string>
+    <string name="nom">Nom</string>
+    <string name="sexe">Sexe</string>
+    <string name="naissance">JJ/MM/AAAA</string>
 
 </resources>
