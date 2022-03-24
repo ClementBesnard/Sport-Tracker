@@ -10,8 +10,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#A9A9A9">
+        android:background="@color/white">
 
+
+        <ImageView
+            android:id="@+id/photoProfil"
+            android:layout_width="72dp"
+            android:layout_height="71dp"
+            android:contentDescription="@string/photo"
+            android:src="@drawable/homme"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.174"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.071" />
 
         <TextView
             android:id="@+id/location"
@@ -109,10 +122,10 @@
             app:layout_constraintVertical_bias="0.15" />
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sexe"
+            android:text="@string/age"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.215"
@@ -144,6 +157,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.28" />
+
+        <Button
+            android:id="@+id/retour"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:text="@string/retour"
+            android:textAlignment="center"
+            android:onClick="retour"
+            android:background="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.888" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

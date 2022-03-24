@@ -61,5 +61,7 @@
     <string name="poidsinput">poidsInput</string>
     <string name="tailleinput">tailleInput</string>
     <string name="taille">Taille</string>
+    <string name="photo">photo</string>
+    <string name="retour">Retour</string>
 
 </resources>
