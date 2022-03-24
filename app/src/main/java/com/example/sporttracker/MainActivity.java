@@ -35,7 +35,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         User user = runningDbHelper.getUser(userId);
 
-        Toast.makeText(this, "Hello " + user.getFirstName(), Toast.LENGTH_SHORT).show();
+        if (this.hasWindowFocus()) {
+            Toast.makeText(this, "Hello " + user.getFirstName(), Toast.LENGTH_SHORT).show();
+        }
+
 
         homeFragment = new HomeFragment();
         profileFragment = new ProfileFragment();

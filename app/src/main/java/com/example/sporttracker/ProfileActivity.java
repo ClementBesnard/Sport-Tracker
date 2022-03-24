@@ -14,6 +14,8 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView prenom;
     private TextView nom;
     private TextView poids;
+    private TextView taille;
+    private TextView age;
     private User user;
 
     @Override
@@ -27,14 +29,26 @@ public class ProfileActivity extends AppCompatActivity {
         String textePrenom = user.getFirstName();
         String texteNom = user.getLastName();
         Integer textePoids = user.getWeight();
+        Integer texteTaille = user.getHeight();
+        Integer texteAge = user.getAge();
 
         this.nom = findViewById(R.id.nom);
-        this.nom.setText(texteNom);
+        this.nom.setText("Nom : " + texteNom);
         this.prenom = findViewById(R.id.prenom);
-        this.prenom.setText(textePrenom);
+        this.prenom.setText("Prenom : " + textePrenom);
+        this.age = findViewById(R.id.age);
+        this.age.setText("Age : " + texteAge.toString());
         this.poids = findViewById(R.id.poidsInput);
         this.poids.setText(textePoids.toString());
+        this.poids.setText(textePoids.toString() + " Kg");
+        this.taille = findViewById(R.id.tailleInput);
+        this.taille.setText(texteTaille.toString() + " Cm");
 
+    }
+
+    public void retour(View view){
+        Intent i = new Intent(ProfileActivity.this, MainActivity.class);
+        startActivity(i);
     }
 
 }
