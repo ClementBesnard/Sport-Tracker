@@ -47,7 +47,7 @@ public class LocationService extends Service {
 
     public static final String TAG = LocationService.class.getSimpleName();
     private static final long LOCATION_REQUEST_INTERVAL = 5000;
-    private static final float LOCATION_REQUEST_DISPLACEMENT = 5.0f;
+    private static final float LOCATION_REQUEST_DISPLACEMENT = 10.0f;
     private static final long LOCATION_REQUEST_FASTEST_INTERVAL = 300;
 
     private GoogleApiClient mGoogleApiClient;

@@ -108,6 +108,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private List<Polyline> polylines;
 
+    private User currentUser;
+
     private Context context;
     public HomeFragment() {
         // Required empty public constructor
@@ -149,6 +151,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationChangeCounter = 0;
 
         this.runningDbHelper = new RunningDbHelper(getContext());
+
+        Integer userId = ((MyApplication) requireActivity().getApplication()).getCurrentUser();
+        currentUser = runningDbHelper.getUser(userId);
 
 
         // Construct a FusedLocationProviderClient.
@@ -194,6 +199,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 double meters = P1.distanceTo(P2);
                 distance+= meters / 1000d;
                 distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
+
+                calories.setText(MessageFormat.format("{0}", currentUser.getWeight() * distance));
 
             }
 
