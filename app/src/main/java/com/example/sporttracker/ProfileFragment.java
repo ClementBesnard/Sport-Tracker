@@ -45,11 +45,15 @@ public class ProfileFragment extends Fragment {
     private RunningDbHelper runningDbHelper;
 
     private List<Activity> activityList;
+    private List<Activity> activityListWeek;
+
 
     private TextView distanceActivity;
     private TextView durationActivity;
     private TextView dateActivity;
     private TextView prenomActivity;
+    private TextView distanceWeek;
+    private TextView timeWeek;
 
     private User user;
 
@@ -105,6 +109,13 @@ public class ProfileFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            try {
+                activityListWeek = runningDbHelper.getUserWeekActivity(userId);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
 
 
 
@@ -123,6 +134,8 @@ public class ProfileFragment extends Fragment {
         this.durationActivity = requireView().findViewById(R.id.durationActivity);
         this.dateActivity = requireView().findViewById(R.id.dateActivity);
         this.prenomActivity = requireView().findViewById(R.id.prenomActivity);
+        this.distanceWeek = requireView().findViewById(R.id.distanceWeek);
+        this.timeWeek = requireView().findViewById(R.id.timeWeek);
 
         LocalTime timeOfDay = LocalTime.ofSecondOfDay(activityList.get(0).getDuration());
         String time = timeOfDay.toString();
@@ -164,6 +177,23 @@ public class ProfileFragment extends Fragment {
         this.durationActivity.setText(time);
         this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
         this.prenomActivity.setText(user.getFirstName());
+
+
+
+        Double distanceWeek = activityListWeek.stream().mapToDouble(Activity::getDistance).sum();
+
+        this.distanceWeek.setText(HomeFragment.round(distanceWeek, 2) + " km");
+
+        Log.d("Week", String.valueOf(activityListWeek.size()));
+
+        Integer timeWeekSecond = activityListWeek.stream().mapToInt(Activity::getDuration).sum();
+
+        Log.d("time", String.valueOf(timeWeekSecond));
+
+        LocalTime timeOfDay2 = LocalTime.ofSecondOfDay(timeWeekSecond);
+        String timeWeek2 = timeOfDay2.toString();
+
+        this.timeWeek.setText(timeWeek2);
 
 
     }

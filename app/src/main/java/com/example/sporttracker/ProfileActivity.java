@@ -33,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         this.prenom = findViewById(R.id.prenom);
         this.prenom.setText(textePrenom);
         this.poids = findViewById(R.id.poidsInput);
-        this.poids.setText(textePoids);
+        this.poids.setText(textePoids.toString());
 
     }
 
