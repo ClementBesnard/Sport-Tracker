@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,11 +43,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         bottomNavigationView.setSelectedItemId(R.id.activity);
 
 
     }
+
 
 
 
@@ -71,4 +75,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         else
             bottomNavigationView.setVisibility(View.GONE);
     }
+
+    public void openProfile(View view){
+        Intent i = new Intent(MainActivity.this, ProfileActivity.class);
+        startActivity(i);
+    }
+
 }

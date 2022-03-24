@@ -167,6 +167,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
     }
+        locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+        /*locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
+                0,
+                1, locationListenerGPS);*/
 
     private final BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override

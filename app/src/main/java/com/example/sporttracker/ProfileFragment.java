@@ -1,5 +1,6 @@
 package com.example.sporttracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.widget.Button;
 import android.widget.ImageView;
 
 /**
@@ -24,6 +27,7 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    //Button profileBtn = (Button)getView().findViewById(R.id.plusDetails);
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -58,7 +62,9 @@ public class ProfileFragment extends Fragment {
             if (getArguments() != null) {
                 mParam1 = getArguments().getString(ARG_PARAM1);
                 mParam2 = getArguments().getString(ARG_PARAM2);
+
             }
+
         }
 
         @Override
