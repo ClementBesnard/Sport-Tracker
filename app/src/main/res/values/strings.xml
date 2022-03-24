@@ -1,6 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Sport Tracker</string>
-    <string name="profile">Mon Profil</string>
+    <string name="myprofile">Mon Profil</string>
     <string name="bottom_navigation_menu_activity">Activité</string>
     <string name="bottom_nagigation_menu_profile">Profil</string>
     <string name="maps_api_key">AIzaSyDDe498SX4dhJQSnnjmYlPrUAVyxgF7d0Y</string>
@@ -55,5 +55,11 @@
     <string name="nom">Nom</string>
     <string name="sexe">Sexe</string>
     <string name="naissance">JJ/MM/AAAA</string>
+    <string name="location">Location</string>
+    <string name="locationinput">locationInput</string>
+    <string name="poids">Poids</string>
+    <string name="poidsinput">poidsInput</string>
+    <string name="tailleinput">tailleInput</string>
+    <string name="taille">Taille</string>
 
 </resources>

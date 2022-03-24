@@ -14,7 +14,78 @@
 
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/location"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.215"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.36" />
+
+        <TextView
+            android:id="@+id/poids"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/poids"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.215"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/taille"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/taille"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.215"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.646" />
+
+        <TextView
+            android:id="@+id/locationInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/locationinput"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.484"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.412" />
+
+        <TextView
+            android:id="@+id/poidsInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/poidsinput"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.486"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.547" />
+
+        <TextView
+            android:id="@+id/tailleInput"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tailleinput"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.699" />
+
+        <TextView
+            android:id="@+id/nom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nom"
@@ -26,7 +97,7 @@
             app:layout_constraintVertical_bias="0.11" />
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/prenom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/prenom"
@@ -49,20 +120,30 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.205" />
 
-        <EditText
-            android:id="@+id/editTextDate"
+        <TextView
+            android:id="@+id/naissance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:hint="@string/naissance"
-            android:inputType="date"
-            android:minHeight="48dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.82"
+            app:layout_constraintHorizontal_bias="0.702"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.183" />
+            app:layout_constraintVertical_bias="0.205" />
+
+        <View
+            android:id="@+id/barreH1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.28" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
