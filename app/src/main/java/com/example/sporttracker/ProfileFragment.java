@@ -115,6 +115,7 @@ public class ProfileFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            Log.d("LIST", activityList.toString());
 
 
 
@@ -175,7 +176,14 @@ public class ProfileFragment extends Fragment {
         Log.d("null ?", String.valueOf(this.distanceActivity == null));
         this.distanceActivity.setText(HomeFragment.round(activityList.get(0).getDistance(), 2 )+ " km");
         this.durationActivity.setText(time);
-        this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
+        if (difference_In_Hours >= 1)
+            this.dateActivity.setText("il y a "+ difference_In_Hours + " heures");
+        else if (difference_In_Days >= 1)
+            this.dateActivity.setText("il y a "+ difference_In_Days + " jours");
+        else
+            this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
+
+
         this.prenomActivity.setText(user.getFirstName());
 
 

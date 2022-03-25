@@ -167,7 +167,7 @@ public class RunningDbHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {String.valueOf(userId)};
 
         String sortOrder =
-                RunningContract.Activity.COLUMN_NAME_DATE + " ASC";
+                RunningContract.Activity.COLUMN_NAME_DATE + " DESC";
 
         Cursor cursor = sqLiteDatabase.query(
                 RunningContract.Activity.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
