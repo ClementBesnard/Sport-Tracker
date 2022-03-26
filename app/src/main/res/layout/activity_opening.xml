@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".OpeningActivity">
+    tools:context=".OpeningActivity"
+    android:background="@drawable/background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,10 +19,14 @@
             android:orientation="vertical" >
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="127dp"
+                android:layout_marginTop="70dp"
                 tools:cardCornerRadius="25dp"
-                tools:cardPreventCornerOverlap="false">
+                tools:cardPreventCornerOverlap="false"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -40,21 +45,28 @@
 
             <Button
                 android:id="@+id/signUp"
-                android:layout_width="179dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginLeft="110dp"
+                android:layout_marginTop="100dp"
+                android:fontFamily="@font/source_sans_pro_bold"
                 android:onClick="singUpActivity"
-                android:text="@string/signUp" />
+                android:padding="15dp"
+                android:text="@string/signUp"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/LogIn"
-                android:layout_width="179dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginLeft="110dp"
+                android:layout_marginTop="60dp"
+                android:fontFamily="@font/source_sans_pro_bold"
                 android:onClick="logInActivity"
-                android:text="@string/LogIn" />
+                android:padding="15dp"
+                android:text="@string/LogIn"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
     </LinearLayout>

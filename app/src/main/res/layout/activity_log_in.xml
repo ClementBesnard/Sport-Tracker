@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LogInActivity">
+    tools:context=".LogInActivity"
+    android:background="@drawable/background">
 
 
     <LinearLayout
@@ -19,10 +20,14 @@
             android:orientation="vertical" >
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="127dp"
+                android:layout_marginTop="70dp"
                 tools:cardCornerRadius="25dp"
-                tools:cardPreventCornerOverlap="false">
+                tools:cardPreventCornerOverlap="false"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -44,14 +49,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:contentDescription="@string/loginProfile"
                 android:minHeight="48dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                app:endIconTint="@color/secondary_color"
+                app:boxStrokeColor="@color/main_color"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
                 <AutoCompleteTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     android:text="@string/loginProfile"
+                    android:textColor="@color/main_color"
+                    android:focusable="false"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -61,32 +71,46 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
                 android:hint="@string/password"
-                app:endIconMode="password_toggle">
+                android:textColorHint="@color/main_color"
+                app:endIconMode="password_toggle"
+                app:endIconTint="@color/main_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_height="match_parent" android:layout_width="match_parent"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/button2"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="160dp"
-                android:layout_marginTop="160dp"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="100dp"
+                android:fontFamily="@font/source_sans_pro_bold"
                 android:onClick="LogIn"
-                android:text="@string/submit" />
+                android:padding="15dp"
+                android:text="@string/submit"
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="160dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="130dp"
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/source_sans_pro_bold"
                 android:onClick="backToHome"
-                android:text="@string/back" />
+                android:padding="15dp"
+                android:text="@string/back"
+                android:textSize="15sp" />
 
         </LinearLayout>
 

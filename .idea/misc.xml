@@ -19,16 +19,14 @@
         <entry key="app/src/main/res/drawable/logo_background.xml" value="0.238" />
         <entry key="app/src/main/res/drawable/profile_background.xml" value="0.2655" />
         <entry key="app/src/main/res/drawable/profile_foreground.xml" value="0.2655" />
+        <entry key="app/src/main/res/font/roboto_light.xml" value="0.22135416666666666" />
         <entry key="app/src/main/res/layout/activity_log_in.xml" value="0.333786231884058" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/activity_opening.xml" value="0.333786231884058" />
         <entry key="app/src/main/res/layout/activity_opening2.xml" value="0.333786231884058" />
-        <entry key="app/src/main/res/layout/activity_sing_up.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_sing_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/bottom_sheet.xml" value="0.3591485507246377" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.36041666666666666" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.36041666666666666" />
-        <entry key="app/src/main/res/layout/fragment_profile_avance.xml" value="0.333786231884058" />
-        <entry key="app/src/main/res/layout/list_item.xml" value="0.333786231884058" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.26723106044113254" />
         <entry key="app/src/main/res/layout/fragment_profile_avance.xml" value="0.25885416666666666" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.333786231884058" />

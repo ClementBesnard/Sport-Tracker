@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SingUpActivity">
+    tools:context=".SingUpActivity"
+    android:background="@drawable/background">
 
 
     <LinearLayout
@@ -19,10 +20,14 @@
             android:orientation="vertical" >
 
             <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="127dp"
+                android:layout_marginTop="70dp"
                 tools:cardCornerRadius="25dp"
-                tools:cardPreventCornerOverlap="false">
+                tools:cardPreventCornerOverlap="false"
+                app:cardBackgroundColor="@android:color/transparent"
+                app:cardElevation="0dp">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -43,12 +48,18 @@
                 android:id="@+id/firstname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
-                android:hint="@string/firstname">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="match_parent" android:layout_width="match_parent" />
+                android:hint="@string/firstname"
+                android:textColorHint="@color/main_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_height="match_parent" android:layout_width="match_parent"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -56,11 +67,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
-                android:hint="@string/lastname">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="match_parent" android:layout_width="match_parent" />
+                android:hint="@string/lastname"
+                android:textColorHint="@color/main_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                    android:layout_height="match_parent" android:layout_width="match_parent"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -69,13 +87,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
                 android:hint="@string/password"
-                app:endIconMode="password_toggle">
+                app:endIconMode="password_toggle"
+                android:textColorHint="@color/main_color"
+                app:endIconTint="@color/main_color"
+
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_height="match_parent" android:layout_width="match_parent"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -83,11 +109,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
-                android:hint="@string/height">
+                android:hint="@string/height"
+                android:textColorHint="@color/main_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="match_parent" android:layout_width="match_parent" />
+                    android:layout_height="match_parent" android:layout_width="match_parent"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -95,11 +127,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
-                android:hint="@string/weight">
+                android:hint="@string/weight"
+                android:textColorHint="@color/main_color"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="match_parent" android:layout_width="match_parent" />
+                    android:layout_height="match_parent" android:layout_width="match_parent"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -107,11 +145,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 android:ems="10"
                 android:minHeight="48dp"
-                android:hint="@string/age">
+                android:hint="@string/age"
+                android:textColorHint="@color/main_color"
+
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:layout_height="match_parent" android:layout_width="match_parent" />
+                    android:layout_height="match_parent" android:layout_width="match_parent"
+                    app:hintTextColor="@color/main_color"
+                    android:textColor="@color/main_color"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -120,22 +165,30 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/button4"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/button"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="110dp"
-                    android:layout_marginTop="20dp"
-                    android:onClick="backToHome"
-                    android:text="Retour" />
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/source_sans_pro_bold"
+                    android:onClick="singUp"
+                    android:text="@string/submit"
+                    android:padding="15dp"
+                    android:textSize="15sp"/>
 
                 <Button
-                    android:id="@+id/button"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/button4"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:onClick="singUp"
-                    android:text="@string/submit" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/source_sans_pro_bold"
+                    android:onClick="backToHome"
+                    android:text="@string/back"
+                    android:padding="15dp"
+                    android:textSize="15sp"/>
+
+
             </LinearLayout>
 
 

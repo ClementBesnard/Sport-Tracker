@@ -318,8 +318,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
-        this.map.getMyLocation();
-
 
     }
 

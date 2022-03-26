@@ -61,7 +61,7 @@
             app:layout_constraintVertical_bias="0.32" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/iconRecentActivity"
             android:layout_width="31dp"
             android:layout_height="29dp"
             android:src="@drawable/running"
@@ -253,6 +253,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.888" />
+
+        <TextView
+            android:id="@+id/emptyActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aucune activité récente"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/textView14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.467"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.82" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

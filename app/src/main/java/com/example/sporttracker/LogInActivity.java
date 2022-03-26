@@ -66,12 +66,17 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     public void LogIn(View view) {
-
-        if (BCrypt.checkpw(Objects.requireNonNull(password.getEditText()).getText().toString(), selectedUser.getPassword())){
-            ((MyApplication)this.getApplication()).setCurrentUser(selectedUser.getId());
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        try {
+            if (BCrypt.checkpw(Objects.requireNonNull(password.getEditText()).getText().toString(), selectedUser.getPassword())){
+                ((MyApplication)this.getApplication()).setCurrentUser(selectedUser.getId());
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            }
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 

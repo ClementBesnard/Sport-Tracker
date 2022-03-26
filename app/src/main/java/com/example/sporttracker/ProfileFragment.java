@@ -56,6 +56,7 @@ public class ProfileFragment extends Fragment {
     private TextView timeWeek;
 
     private User user;
+    private TextView emptyActivity;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -137,56 +138,67 @@ public class ProfileFragment extends Fragment {
         this.prenomActivity = requireView().findViewById(R.id.prenomActivity);
         this.distanceWeek = requireView().findViewById(R.id.distanceWeek);
         this.timeWeek = requireView().findViewById(R.id.timeWeek);
+        this.emptyActivity = requireView().findViewById(R.id.emptyActivity);
 
-        LocalTime timeOfDay = LocalTime.ofSecondOfDay(activityList.get(0).getDuration());
-        String time = timeOfDay.toString();
+        try {
+            LocalTime timeOfDay = LocalTime.ofSecondOfDay(activityList.get(0).getDuration());
+            String time = timeOfDay.toString();
 
-        Date today = new Date();
+            Date today = new Date();
 
-        Date date = activityList.get(0).getDate();
+            Date date = activityList.get(0).getDate();
 
-        long difference = today.getTime() - date.getTime();
+            long difference = today.getTime() - date.getTime();
 
-        long difference_In_Seconds
-                = (difference
-                / 1000)
-                % 60;
+            long difference_In_Seconds
+                    = (difference
+                    / 1000)
+                    % 60;
 
-        long difference_In_Minutes
-                = (difference
-                / (1000 * 60))
-                % 60;
+            long difference_In_Minutes
+                    = (difference
+                    / (1000 * 60))
+                    % 60;
 
-        long difference_In_Hours
-                = (difference
-                / (1000 * 60 * 60))
-                % 24;
+            long difference_In_Hours
+                    = (difference
+                    / (1000 * 60 * 60))
+                    % 24;
 
-        long difference_In_Years
-                = (difference
-                / (1000l * 60 * 60 * 24 * 365));
+            long difference_In_Years
+                    = (difference
+                    / (1000l * 60 * 60 * 24 * 365));
 
-        long difference_In_Days
-                = (difference
-                / (1000 * 60 * 60 * 24))
-                % 365;
+            long difference_In_Days
+                    = (difference
+                    / (1000 * 60 * 60 * 24))
+                    % 365;
 
-        Log.d("Activity", String.valueOf(activityList.get(0)));
-        Log.d("len", String.valueOf(activityList.size()));
-        Log.d("null ?", String.valueOf(this.distanceActivity == null));
-        this.distanceActivity.setText(HomeFragment.round(activityList.get(0).getDistance(), 2 )+ " km");
-        this.durationActivity.setText(time);
-        if (difference_In_Hours >= 1)
-            this.dateActivity.setText("il y a "+ difference_In_Hours + " heures");
-        else if (difference_In_Days >= 1)
-            this.dateActivity.setText("il y a "+ difference_In_Days + " jours");
-        else
-            this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
-
-
-        this.prenomActivity.setText(user.getFirstName());
+            Log.d("Activity", String.valueOf(activityList.get(0)));
+            Log.d("len", String.valueOf(activityList.size()));
+            Log.d("null ?", String.valueOf(this.distanceActivity == null));
+            this.distanceActivity.setText(HomeFragment.round(activityList.get(0).getDistance(), 2 )+ " km");
+            this.durationActivity.setText(time);
+            if (difference_In_Hours >= 1)
+                this.dateActivity.setText("il y a "+ difference_In_Hours + " heures");
+            else if (difference_In_Days >= 1)
+                this.dateActivity.setText("il y a "+ difference_In_Days + " jours");
+            else
+                this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
 
 
+            this.prenomActivity.setText(user.getFirstName());
+
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+            this.dateActivity.setVisibility(View.INVISIBLE);
+            this.distanceActivity.setVisibility(View.INVISIBLE);
+            this.durationActivity.setVisibility(View.INVISIBLE);
+            this.emptyActivity.setVisibility(View.VISIBLE);
+        }
 
         Double distanceWeek = activityListWeek.stream().mapToDouble(Activity::getDistance).sum();
 
@@ -202,6 +214,7 @@ public class ProfileFragment extends Fragment {
         String timeWeek2 = timeOfDay2.toString();
 
         this.timeWeek.setText(timeWeek2);
+
 
 
     }
