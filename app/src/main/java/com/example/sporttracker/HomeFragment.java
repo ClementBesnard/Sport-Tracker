@@ -21,19 +21,24 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -113,6 +118,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private Integer userId;
 
     private Context context;
+    private ConstraintLayout bottomLayoutHome;
+    private ConstraintLayout bottomLayoutHomeCopy;
+    private SupportMapFragment mapFragment;
+    private CardView longPressButton;
+    private ProgressBar bar;
+    private View stopButton;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -166,6 +178,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(mMessageReceiver, new IntentFilter("intentKey"));
 
         polylines = new ArrayList<>();
+
+
+
 
 
     }
@@ -225,7 +240,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+
+        Log.d("HERE", "LA");
+
         assert mapFragment != null;
         mapFragment.getMapAsync((OnMapReadyCallback) this);
 
@@ -234,6 +253,75 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         calories = requireView().findViewById(R.id.calories);
         rhythmView = requireView().findViewById(R.id.rhythm);
         RunButton = requireView().findViewById(R.id.startRun);
+
+
+        longPressButton = requireView().findViewById(R.id.btnProgress);
+
+        bar = longPressButton.findViewById(R.id.progressBar);
+
+        Vibrator v = (Vibrator) requireActivity().getSystemService(Context.VIBRATOR_SERVICE);
+
+        longPressButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                new CountDownTimer(2000, 1){
+                    @Override
+                    public void onTick(long l) {
+                        if (!longPressButton.isPressed()){
+                            bar.setProgress(0);
+                            v.cancel();
+                            //Cancelar a contagem | Cancel the count
+                            cancel();
+                        }else{
+                            bar.setProgress(1 + bar.getProgress());
+                            v.vibrate(l);
+                        }
+                    }
+
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onFinish() {
+
+                        getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);
+
+                        long elapsedRealtime = SystemClock.elapsedRealtime();
+
+                        bar.setProgress(0);
+                        time.stop();
+                        Intent intentStop = new Intent(requireActivity(), LocationService.class);
+                        intentStop.setAction("stop");
+                        context.startForegroundService(intentStop);
+
+                        Date date = new Date();
+                        Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
+                        Activity activity = new Activity(duration, distance, 0, date, userId, 0);
+                        runningDbHelper.addNewActivity(activity);
+
+
+                        time.setBase(elapsedRealtime);
+                        distance = 0;
+                        distanceView.setText(MessageFormat.format("{0} km", Integer.toString((int) distance)));
+                        rhythmView.setText("00:00");
+                        calories.setText("0");
+                        RunButton.setText(R.string.start);
+                        RunButton.setId(R.id.startRun);
+                        RunButton.setVisibility(View.VISIBLE);
+                        longPressButton.setVisibility(View.INVISIBLE);
+                        for (Polyline polyline : polylines ) {
+                            polyline.remove();
+                        }
+
+                        locationList.clear();
+                    }
+                }.start();
+
+                return true;
+            };
+        });
+
+
+
+
 
         time.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
 
@@ -255,46 +343,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void startRun(View view) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-        switch (view.getId()){
-            case R.id.startRun:
                 Intent intent = new Intent(requireActivity(), LocationService.class);
                 intent.setAction("start");
 
+                view.setVisibility(View.INVISIBLE);
+                longPressButton.setVisibility(View.VISIBLE);
                 time.setBase(elapsedRealtime);
                 time.start();
                 context.startForegroundService(intent);
                 RunButton.setText(R.string.stop);
                 RunButton.setId(R.id.stopRun);
-                break;
-            case R.id.stopRun:
-                time.stop();
-                Intent intentStop = new Intent(requireActivity(), LocationService.class);
-                intentStop.setAction("stop");
-                context.startForegroundService(intentStop);
-
-                Date date = new Date();
-                Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
-                Activity activity = new Activity(duration, distance, 0, date, userId, 0);
-                runningDbHelper.addNewActivity(activity);
-
-
-                time.setBase(elapsedRealtime);
-                distance = 0;
-                distanceView.setText(MessageFormat.format("{0} km", Integer.toString((int) distance)));
-                rhythmView.setText("00:00");
-                RunButton.setText(R.string.start);
-                RunButton.setId(R.id.startRun);
-
-                for (Polyline polyline : polylines ) {
-                    polyline.remove();
-                }
-
-                locationList.clear();
-
-                break;
         }
 
-    }
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();

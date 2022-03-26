@@ -34,6 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:fontFamily="@font/source_sans_pro_bold"
                 android:gravity="center"
                 android:text="@string/time" />
 
@@ -43,6 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
+                android:fontFamily="@font/source_sans_pro_bold"
                 android:gravity="center"
                 android:textSize="34sp" />
         </LinearLayout>
@@ -65,6 +67,7 @@
                     android:id="@+id/textView5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/source_sans_pro_bold"
                     android:gravity="center"
                     android:text="@string/distance" />
 
@@ -72,6 +75,7 @@
                     android:id="@+id/distance"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:fontFamily="@font/source_sans_pro_bold"
                     android:gravity="center"
                     android:text="0 km" />
             </LinearLayout>
@@ -87,6 +91,7 @@
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_bold"
                     android:gravity="center"
                     android:text="@string/rythme" />
 
@@ -94,6 +99,7 @@
                     android:id="@+id/rhythm"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_bold"
                     android:gravity="center"
                     android:text="00:00" />
             </LinearLayout>
@@ -109,6 +115,7 @@
                     android:id="@+id/textView9"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_bold"
                     android:gravity="center"
                     android:text="@string/calories" />
 
@@ -116,6 +123,7 @@
                     android:id="@+id/calories"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/source_sans_pro_bold"
                     android:gravity="center"
                     android:text="0" />
             </LinearLayout>
@@ -124,21 +132,29 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottomHomeLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <Button
             android:id="@+id/startRun"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/source_sans_pro_bold"
             android:onClick="startRunButton"
+            android:padding="15dp"
+            app:cardCornerRadius="10dp"
             android:text="@string/start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include layout="@layout/btn_progress" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

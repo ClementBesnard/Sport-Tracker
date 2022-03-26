@@ -187,9 +187,6 @@ public class ProfileFragment extends Fragment {
                 this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
 
 
-            this.prenomActivity.setText(user.getFirstName());
-
-
         }
         catch (Exception e){
             e.printStackTrace();
@@ -199,6 +196,9 @@ public class ProfileFragment extends Fragment {
             this.durationActivity.setVisibility(View.INVISIBLE);
             this.emptyActivity.setVisibility(View.VISIBLE);
         }
+
+        this.prenomActivity.setText(user.getFirstName());
+
 
         Double distanceWeek = activityListWeek.stream().mapToDouble(Activity::getDistance).sum();
 

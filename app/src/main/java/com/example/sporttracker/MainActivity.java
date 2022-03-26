@@ -3,6 +3,7 @@ package com.example.sporttracker;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.graphics.Paint;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private RunningDbHelper runningDbHelper;
     private HomeFragment homeFragment;
     private ProfileFragment profileFragment;
+    private CardView longPressButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +75,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void startRunButton(View view) {
         homeFragment.startRun(view);
-        if (view.getId() == R.id.startRun)
-            bottomNavigationView.setVisibility(View.VISIBLE);
-        else
-            bottomNavigationView.setVisibility(View.GONE);
+        bottomNavigationView.setVisibility(View.GONE);
     }
+
+
 
     public void openProfile(View view){
         Intent i = new Intent(MainActivity.this, ProfileActivity.class);
