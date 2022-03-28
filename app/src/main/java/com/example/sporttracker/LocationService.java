@@ -1,59 +1,47 @@
 package com.example.sporttracker;
 
-import android.Manifest;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
-import android.provider.SyncStateContract;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.text.MessageFormat;
-import java.util.concurrent.Executor;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class LocationService extends Service {
 
     public static final String TAG = LocationService.class.getSimpleName();
-    private static final long LOCATION_REQUEST_INTERVAL = 5000;
-    private static final float LOCATION_REQUEST_DISPLACEMENT = 10.0f;
-    private static final long LOCATION_REQUEST_FASTEST_INTERVAL = 300;
+    private static final long LOCATION_REQUEST_INTERVAL = 1000;
+    private static final float LOCATION_REQUEST_DISPLACEMENT = 5.0f;
+    private static final long LOCATION_REQUEST_FASTEST_INTERVAL = 500;
 
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
+
 
     @Nullable
     @Override
@@ -67,6 +55,8 @@ public class LocationService extends Service {
     public void onCreate() {
         super.onCreate();
 
+
+
         //this.m_locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         Toast.makeText(getApplicationContext(), "Location Service starts", Toast.LENGTH_SHORT).show();
@@ -76,9 +66,20 @@ public class LocationService extends Service {
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+
                 Location location = locationResult.getLastLocation();
+
+
+
+
                 //Toast.makeText(getApplicationContext(), "Update", Toast.LENGTH_SHORT).show();
+
                 sendMessageToActivity(location.getLatitude(), location.getLongitude());
+
+
+
 
 
             }

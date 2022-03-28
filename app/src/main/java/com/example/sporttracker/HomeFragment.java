@@ -5,12 +5,15 @@ import static android.content.ContentValues.TAG;
 
 import static java.lang.Math.round;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -18,6 +21,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.content.Context;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -38,6 +43,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -48,7 +55,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
@@ -77,6 +89,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 2;
     private final LatLng defaultLocation = new LatLng(-33.8523341, 151.2106085);
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final int DEFAULT_ZOOM = 15;
@@ -125,6 +138,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private ProgressBar bar;
     private View stopButton;
 
+    private Marker positionMarker;
+    private boolean locationCoarsePermissionGranted;
+    private ImageButton locationButton;
+
+    private LatLng currentLoc;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -147,6 +166,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return fragment;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +199,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         polylines = new ArrayList<>();
 
+        tracking = false;
+        Intent intent = new Intent(requireActivity(), LocationService.class);
+        intent.setAction("start");
+
+        context.startForegroundService(intent);
+
+
+
+
 
 
 
@@ -195,35 +224,72 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             // Get extra data included in the Intent
             double lat = intent.getDoubleExtra("lat", 0d);
             double lon = intent.getDoubleExtra("lon", 0d);
-            locationList.add(new LatLng(lat, lon));
-            if (locationList.size() > 1){
-                Log.d("LAT1", String.valueOf(locationList.get(locationList.size() - 1).latitude));
-                Log.d("LON1", String.valueOf(locationList.get(locationList.size() - 1).longitude));
+            LatLng latLng = new LatLng(lat,lon);
+            currentLoc = latLng;
+            Log.d("UPDATE", String.valueOf(lat));
 
-                Log.d("LAT2", String.valueOf(locationList.get(locationList.size() - 2).latitude));
-                Log.d("LON2", String.valueOf(locationList.get(locationList.size() - 2).longitude));
+            if (positionMarker == null) {
 
-                Polyline polyline = map.addPolyline(new PolylineOptions()
-                        .add(
-                                locationList.get(locationList.size() - 1),
-                                locationList.get(locationList.size() - 2)));
+                Bitmap imageBitmap = BitmapFactory.decodeResource(requireActivity().getResources(),requireActivity().getResources().getIdentifier("marker", "drawable", requireActivity().getPackageName()));
+                Bitmap marker = Bitmap.createScaledBitmap(imageBitmap, 60, 60, false);
 
-                polylines.add(polyline);
-                Location P1 = new Location("P1");
-                P1.setLatitude(locationList.get(locationList.size() - 1).latitude);
-                P1.setLongitude(locationList.get(locationList.size() - 1).longitude);
-
-                Location P2 = new Location("P2");
-                P2.setLatitude(locationList.get(locationList.size() - 2).latitude);
-                P2.setLongitude(locationList.get(locationList.size() - 2).longitude);
-
-                double meters = P1.distanceTo(P2);
-                distance+= meters / 1000d;
-                distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
-
-                calories.setText(MessageFormat.format("{0}", currentUser.getWeight() * distance));
+                MarkerOptions positionMarkerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .anchor(0.5f, 0.5f)
+                        .icon(BitmapDescriptorFactory.fromBitmap(marker));
+                positionMarker = map.addMarker(positionMarkerOptions);
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+            }
+            else{
+                positionMarker.setPosition(latLng);
+                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
 
             }
+
+            if (!tracking){
+                if (locationList.size() > 0)
+                    locationList.remove(0);
+                locationList.add(latLng);
+            }
+
+
+
+            if (tracking){
+                locationList.add(latLng);
+                if (locationList.size() > 1){
+                    Log.d("LAT1", String.valueOf(locationList.get(locationList.size() - 1).latitude));
+                    Log.d("LON1", String.valueOf(locationList.get(locationList.size() - 1).longitude));
+
+                    Log.d("LAT2", String.valueOf(locationList.get(locationList.size() - 2).latitude));
+                    Log.d("LON2", String.valueOf(locationList.get(locationList.size() - 2).longitude));
+
+                    Polyline polyline = map.addPolyline(new PolylineOptions().color(requireActivity().getResources().getColor(R.color.secondary_color))
+                            .add(
+                                    locationList.get(locationList.size() - 1),
+                                    locationList.get(locationList.size() - 2)));
+
+                    polylines.add(polyline);
+                    Location P1 = new Location("P1");
+                    P1.setLatitude(locationList.get(locationList.size() - 1).latitude);
+                    P1.setLongitude(locationList.get(locationList.size() - 1).longitude);
+
+                    Location P2 = new Location("P2");
+                    P2.setLatitude(locationList.get(locationList.size() - 2).latitude);
+                    P2.setLongitude(locationList.get(locationList.size() - 2).longitude);
+
+                    double meters = P1.distanceTo(P2);
+                    distance+= meters / 1000d;
+                    distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
+
+                    calories.setText(MessageFormat.format("{0}", currentUser.getWeight() * distance));
+
+                }
+            }
+
+
+
+
+
 
         }
     };
@@ -254,6 +320,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         rhythmView = requireView().findViewById(R.id.rhythm);
         RunButton = requireView().findViewById(R.id.startRun);
 
+        locationButton = requireView().findViewById(R.id.locationButton);
+
+        locationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLoc,DEFAULT_ZOOM));
+
+            }
+        });
+
 
         longPressButton = requireView().findViewById(R.id.btnProgress);
 
@@ -281,16 +357,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onFinish() {
-
+                        tracking = false;
                         getActivity().findViewById(R.id.bottomNavigationView).setVisibility(View.VISIBLE);
 
                         long elapsedRealtime = SystemClock.elapsedRealtime();
 
                         bar.setProgress(0);
                         time.stop();
-                        Intent intentStop = new Intent(requireActivity(), LocationService.class);
-                        intentStop.setAction("stop");
-                        context.startForegroundService(intentStop);
+
 
                         Date date = new Date();
                         Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
@@ -343,14 +417,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void startRun(View view) {
         long elapsedRealtime = SystemClock.elapsedRealtime();
-                Intent intent = new Intent(requireActivity(), LocationService.class);
-                intent.setAction("start");
 
+                tracking = true;
                 view.setVisibility(View.INVISIBLE);
                 longPressButton.setVisibility(View.VISIBLE);
                 time.setBase(elapsedRealtime);
                 time.start();
-                context.startForegroundService(intent);
                 RunButton.setText(R.string.stop);
                 RunButton.setId(R.id.stopRun);
         }
@@ -369,6 +441,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap map) {
         this.map = map;
 
+        this.map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
         // Prompt the user for permission.
         getLocationPermission();
 
@@ -382,6 +456,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Prompts the user for permission to use the device location.
+     */
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -399,11 +476,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Handles the result of the request for location permissions.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         locationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
@@ -417,6 +496,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         updateLocationUI();
     }
 
+
     private void updateLocationUI() {
 
         if (map == null) {
@@ -424,7 +504,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
         try {
             if (locationPermissionGranted) {
-                map.setMyLocationEnabled(true);
+                map.setMyLocationEnabled(false);
                 map.getUiSettings().setMyLocationButtonEnabled(true);
 
             } else {
@@ -451,6 +531,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.getResult();
                         if (lastKnownLocation != null) {
+
                             map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(lastKnownLocation.getLatitude(),
                                             lastKnownLocation.getLongitude()), DEFAULT_ZOOM));
@@ -482,6 +563,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
         super.onSaveInstanceState(outState);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Intent intentStop = new Intent(requireActivity(), LocationService.class);
+        intentStop.setAction("stop");
+        context.startForegroundService(intentStop);
     }
 
 }

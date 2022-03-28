@@ -8,13 +8,29 @@
     tools:context=".HomeFragment"
     android:background="@color/white">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map_fragment"
-        class="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
-        />
+        android:layout_weight="7">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/map_fragment"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/locationButton"
+            android:layout_width="91dp"
+            android:layout_height="67dp"
+            android:layout_marginLeft="300dp"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/current_location"
+            />
+
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -152,7 +168,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include layout="@layout/btn_progress" />
+        <include
+            layout="@layout/btn_progress"
+            tools:layout_editor_absoluteX="-16dp"
+            tools:layout_editor_absoluteY="0dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

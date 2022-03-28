@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
 
 
-        homeFragment = new HomeFragment();
-        profileFragment = new ProfileFragment();
+
 
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -60,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        homeFragment = new HomeFragment();
+        profileFragment = new ProfileFragment();
 
         switch (item.getItemId()) {
             case R.id.activity:
