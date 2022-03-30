@@ -6,12 +6,12 @@ public class Activity {
 
     private Integer duration;
     private Double distance;
-    private Integer calories;
+    private Double calories;
     private Date date;
     private Integer profileId;
     private Integer itineraryId;
 
-    public Activity(Integer duration, Double distance, Integer calories, Date date, Integer profileId, Integer itineraryId){
+    public Activity(Integer duration, Double distance, Double calories, Date date, Integer profileId, Integer itineraryId){
         this.duration = duration;
         this.distance = distance;
         this.calories = calories;
@@ -29,7 +29,7 @@ public class Activity {
         return distance;
     }
 
-    public Integer getCalories() {
+    public Double getCalories() {
         return calories;
     }
 

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class RunningDbHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "Running.db";
 
     public RunningDbHelper(Context context) {
@@ -178,7 +178,7 @@ public class RunningDbHelper extends SQLiteOpenHelper {
 
 
         while (cursor.moveToNext()){
-            Activity activity = new Activity(cursor.getInt(1), cursor.getDouble(2), cursor.getInt(3), dateFormat.parse(cursor.getString(4)), cursor.getInt(5), cursor.getInt(6));
+            Activity activity = new Activity(cursor.getInt(1), cursor.getDouble(2), cursor.getDouble(3), dateFormat.parse(cursor.getString(4)), cursor.getInt(5), cursor.getInt(6));
             activities.add(activity);
         }
 
@@ -218,7 +218,7 @@ public class RunningDbHelper extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()){
             Log.d("NEWONE", "1");
-            Activity activity = new Activity(cursor.getInt(1), cursor.getDouble(2), cursor.getInt(3), dateFormat.parse(cursor.getString(4)), cursor.getInt(5), cursor.getInt(6));
+            Activity activity = new Activity(cursor.getInt(1), cursor.getDouble(2), cursor.getDouble(3), dateFormat.parse(cursor.getString(4)), cursor.getInt(5), cursor.getInt(6));
             activities.add(activity);
         }
 

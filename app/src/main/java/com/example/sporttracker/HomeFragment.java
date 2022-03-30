@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -59,6 +60,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -144,6 +146,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private LatLng currentLoc;
 
+    private Double cal;
+
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -210,8 +215,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-
-
     }
         //locationManager=(LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
         /*locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
@@ -228,23 +231,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             currentLoc = latLng;
             Log.d("UPDATE", String.valueOf(lat));
 
-            if (positionMarker == null) {
+            if (getActivity() != null)
+                if (positionMarker == null) {
 
-                Bitmap imageBitmap = BitmapFactory.decodeResource(requireActivity().getResources(),requireActivity().getResources().getIdentifier("marker", "drawable", requireActivity().getPackageName()));
-                Bitmap marker = Bitmap.createScaledBitmap(imageBitmap, 60, 60, false);
+                    Bitmap imageBitmap = BitmapFactory.decodeResource(requireActivity().getResources(),requireActivity().getResources().getIdentifier("marker", "drawable", requireActivity().getPackageName()));
+                    Bitmap marker = Bitmap.createScaledBitmap(imageBitmap, 60, 60, false);
 
-                MarkerOptions positionMarkerOptions = new MarkerOptions()
-                        .position(latLng)
-                        .anchor(0.5f, 0.5f)
-                        .icon(BitmapDescriptorFactory.fromBitmap(marker));
-                positionMarker = map.addMarker(positionMarkerOptions);
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
-            }
-            else{
-                positionMarker.setPosition(latLng);
-                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
+                    MarkerOptions positionMarkerOptions = new MarkerOptions()
+                            .position(latLng)
+                            .anchor(0.5f, 0.5f)
+                            .icon(BitmapDescriptorFactory.fromBitmap(marker));
+                    positionMarker = map.addMarker(positionMarkerOptions);
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+                }
+                else{
+                    positionMarker.setPosition(latLng);
+                    //map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
 
-            }
+                }
 
             if (!tracking){
                 if (locationList.size() > 0)
@@ -281,7 +285,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     distance+= meters / 1000d;
                     distanceView.setText(MessageFormat.format("{0} km", round(distance,3)));
 
-                    calories.setText(MessageFormat.format("{0}", currentUser.getWeight() * distance));
+                    cal = currentUser.getWeight() * distance;
+                    calories.setText(MessageFormat.format("{0}", cal));
 
                 }
             }
@@ -309,10 +314,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
 
-        Log.d("HERE", "LA");
-
         assert mapFragment != null;
         mapFragment.getMapAsync((OnMapReadyCallback) this);
+
 
         time = requireView().findViewById(R.id.time);
         distanceView = requireView().findViewById(R.id.distance);
@@ -368,7 +372,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                         Date date = new Date();
                         Integer duration = Math.toIntExact(TimeUnit.MILLISECONDS.toSeconds(SystemClock.elapsedRealtime() - time.getBase()));
-                        Activity activity = new Activity(duration, distance, 0, date, userId, 0);
+                        Activity activity = new Activity(duration, distance, cal, date, userId, 0);
                         runningDbHelper.addNewActivity(activity);
 
 
@@ -441,7 +445,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap map) {
         this.map = map;
 
-        this.map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+
+        this.map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -479,6 +486,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Handles the result of the request for location permissions.
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,

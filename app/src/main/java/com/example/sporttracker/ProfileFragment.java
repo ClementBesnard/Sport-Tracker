@@ -2,6 +2,7 @@ package com.example.sporttracker;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -19,12 +20,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Executor;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +64,7 @@ public class ProfileFragment extends Fragment {
 
     private User user;
     private TextView emptyActivity;
+    private TextView calories;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -95,7 +103,6 @@ public class ProfileFragment extends Fragment {
                 mParam2 = getArguments().getString(ARG_PARAM2);
 
             }
-
 
             this.runningDbHelper = new RunningDbHelper(getContext());
 
@@ -139,6 +146,7 @@ public class ProfileFragment extends Fragment {
         this.distanceWeek = requireView().findViewById(R.id.distanceWeek);
         this.timeWeek = requireView().findViewById(R.id.timeWeek);
         this.emptyActivity = requireView().findViewById(R.id.emptyActivity);
+        this.calories = requireView().findViewById(R.id.caloriesWeek);
 
         try {
             LocalTime timeOfDay = LocalTime.ofSecondOfDay(activityList.get(0).getDuration());
@@ -174,17 +182,25 @@ public class ProfileFragment extends Fragment {
                     / (1000 * 60 * 60 * 24))
                     % 365;
 
-            Log.d("Activity", String.valueOf(activityList.get(0)));
-            Log.d("len", String.valueOf(activityList.size()));
-            Log.d("null ?", String.valueOf(this.distanceActivity == null));
+
             this.distanceActivity.setText(HomeFragment.round(activityList.get(0).getDistance(), 2 )+ " km");
             this.durationActivity.setText(time);
-            if (difference_In_Hours >= 1)
-                this.dateActivity.setText("il y a "+ difference_In_Hours + " heures");
-            else if (difference_In_Days >= 1)
-                this.dateActivity.setText("il y a "+ difference_In_Days + " jours");
+
+            if (difference_In_Days >= 1)
+                if (Locale.getDefault().getLanguage().equals("en"))
+                    this.dateActivity.setText(difference_In_Days + " days ago");
+                else
+                    this.dateActivity.setText("Il y a " + difference_In_Days + " jours");
+            else if (difference_In_Hours >= 1)
+                if (Locale.getDefault().getLanguage().equals("en"))
+                    this.dateActivity.setText(difference_In_Hours + " hours ago");
+                else
+                    this.dateActivity.setText("Il y a " + difference_In_Hours + " heures");
             else
-                this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
+                if (Locale.getDefault().getLanguage().equals("en"))
+                    this.dateActivity.setText(difference_In_Minutes + " minutes ago");
+                else
+                    this.dateActivity.setText("il y a "+ difference_In_Minutes + " minutes");
 
 
         }
@@ -204,16 +220,18 @@ public class ProfileFragment extends Fragment {
 
         this.distanceWeek.setText(HomeFragment.round(distanceWeek, 2) + " km");
 
-        Log.d("Week", String.valueOf(activityListWeek.size()));
 
         Integer timeWeekSecond = activityListWeek.stream().mapToInt(Activity::getDuration).sum();
 
-        Log.d("time", String.valueOf(timeWeekSecond));
 
         LocalTime timeOfDay2 = LocalTime.ofSecondOfDay(timeWeekSecond);
         String timeWeek2 = timeOfDay2.toString();
 
         this.timeWeek.setText(timeWeek2);
+
+        Double caloriesWeek = activityListWeek.stream().mapToDouble(Activity::getCalories).sum();
+        Log.d("CAL", String.valueOf(caloriesWeek));
+        this.calories.setText(String.valueOf(HomeFragment.round(caloriesWeek,2)));
 
 
 

@@ -1,12 +1,24 @@
 package com.example.sporttracker;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.Executor;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -16,7 +28,12 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView poids;
     private TextView taille;
     private TextView age;
+    private TextView locationP;
     private User user;
+    private FusedLocationProviderClient fusedLocationClient;
+    private Geocoder geocoder;
+    private List<Address> addresses;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -32,10 +49,12 @@ public class ProfileActivity extends AppCompatActivity {
         Integer texteTaille = user.getHeight();
         Integer texteAge = user.getAge();
 
-        this.nom = findViewById(R.id.nom);
-        this.nom.setText("Nom : " + texteNom);
-        this.prenom = findViewById(R.id.prenom);
-        this.prenom.setText("Prenom : " + textePrenom);
+        this.locationP = findViewById(R.id.locationInput);
+
+        this.nom = findViewById(R.id.nomInput);
+        this.nom.setText(texteNom);
+        this.prenom = findViewById(R.id.prenomInput);
+        this.prenom.setText(textePrenom);
         this.age = findViewById(R.id.age);
         this.age.setText("Age : " + texteAge.toString());
         this.poids = findViewById(R.id.poidsInput);
@@ -43,6 +62,33 @@ public class ProfileActivity extends AppCompatActivity {
         this.poids.setText(textePoids.toString() + " Kg");
         this.taille = findViewById(R.id.tailleInput);
         this.taille.setText(texteTaille.toString() + " Cm");
+
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener( this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            try {
+                                addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                String address = addresses.get(0).getAddressLine(0);
+                                String city = addresses.get(0).getLocality();
+                                String state = addresses.get(0).getAdminArea();
+                                String country = addresses.get(0).getCountryName();
+                                String postalCode = addresses.get(0).getPostalCode();
+                                String knownName = addresses.get(0).getFeatureName();
+
+                                locationP.setText(address);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
 
     }
 

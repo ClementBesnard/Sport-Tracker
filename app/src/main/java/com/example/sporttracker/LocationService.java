@@ -34,13 +34,15 @@ public class LocationService extends Service {
 
     public static final String TAG = LocationService.class.getSimpleName();
     private static final long LOCATION_REQUEST_INTERVAL = 1000;
-    private static final float LOCATION_REQUEST_DISPLACEMENT = 5.0f;
+    private static final float LOCATION_REQUEST_DISPLACEMENT = 0.0f;
     private static final long LOCATION_REQUEST_FASTEST_INTERVAL = 500;
 
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LocationRequest mLocationRequest;
     private LocationCallback mLocationCallback;
+
+    private Location lastLocation;
 
 
     @Nullable
@@ -59,7 +61,7 @@ public class LocationService extends Service {
 
         //this.m_locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
-        Toast.makeText(getApplicationContext(), "Location Service starts", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Location Service starts", Toast.LENGTH_SHORT).show();
 
         showNotificationAndStartForegroundService();
 
@@ -71,12 +73,15 @@ public class LocationService extends Service {
 
                 Location location = locationResult.getLastLocation();
 
+                if (lastLocation == null){
+                    lastLocation = location;
+                    sendMessageToActivity(location.getLatitude(), location.getLongitude());
+                }
+                else if (lastLocation.distanceTo(location) - (1.5 * location.getAccuracy()) >= 0){
+                    sendMessageToActivity(location.getLatitude(), location.getLongitude());
+                    lastLocation = location;
+                }
 
-
-
-                //Toast.makeText(getApplicationContext(), "Update", Toast.LENGTH_SHORT).show();
-
-                sendMessageToActivity(location.getLatitude(), location.getLongitude());
 
 
 
@@ -98,7 +103,7 @@ public class LocationService extends Service {
 
         if (intent.getAction().equals("start")) {
             // your start service code
-            Toast.makeText(getApplicationContext(), "Service starts", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Service starts", Toast.LENGTH_SHORT).show();
 
             //final String channel_id = "Foreground Service Id";
             //NotificationChannel channel = new NotificationChannel(
@@ -193,12 +198,12 @@ public class LocationService extends Service {
                 notificationManager.createNotificationChannel(mChannel);
             }
             builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-            builder.setSmallIcon(R.mipmap.ic_launcher)
+            builder.setSmallIcon(R.mipmap.ic_launcher2)
                     .setContentTitle(getString(R.string.app_name));
             startForeground(NOTIFICATION_ID, builder.build());
         } else {
             builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-            builder.setSmallIcon(R.mipmap.ic_launcher)
+            builder.setSmallIcon(R.mipmap.ic_launcher2)
                     .setContentTitle(getString(R.string.app_name));
             startForeground(NOTIFICATION_ID, builder.build());
         }

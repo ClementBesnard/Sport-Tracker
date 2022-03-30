@@ -1,8 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <string name="app_name">Sport Tracker</string>
-    <string name="myProfile">Mon Profil</string>
-    <string name="bottom_navigation_menu_activity">Activité</string>
-    <string name="bottom_nagigation_menu_profile">Profil</string>
+    <string name="myProfile">My profile</string>
+    <string name="bottom_navigation_menu_activity">Activity</string>
+    <string name="bottom_nagigation_menu_profile">Profile</string>
     <string name="maps_api_key">AIzaSyDDe498SX4dhJQSnnjmYlPrUAVyxgF7d0Y</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -10,14 +11,14 @@
     <string name="hello_blank_fragment_1">Hello blank fragment 2</string>
     <string name="timeText">Time</string>
     <string name="topScrollView">topScrollView</string>
-    <string name="time">Durée</string>
+    <string name="time">Duration</string>
     <string name="distance">Distance</string>
-    <string name="rythme">Rythme (min/km)</string>
+    <string name="rythme">Rhythm (min/km)</string>
     <string name="calories">Calories (kcal)</string>
-    <string name="start">Lancer</string>
+    <string name="start">Start</string>
     <string name="todo">TODO</string>
     <string name="profile">Profile</string>
-    <string name="stop">Arreter</string>
+    <string name="stop">Stop</string>
     <string name="title_activity_opening">OpeningActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -27,41 +28,40 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="signUp">S\'inscrire</string>
-    <string name="LogIn">Se connecter</string>
-    <string name="firstname">Prénom</string>
-    <string name="lastname">Nom</string>
+    <string name="signUp">Sign Up</string>
+    <string name="LogIn">Login</string>
+    <string name="firstname">Fisrtname</string>
+    <string name="lastname">Lastname</string>
     <string name="age">Age</string>
-    <string name="weight">Poids</string>
-    <string name="height">Taille</string>
-    <string name="password">Mot de passe</string>
-    <string name="submit">Valider</string>
-    <string name="loginProfile">Choisissez un profil</string>
-    <string name="back">Retour</string>
-    <string name="temps">Temps</string>
+    <string name="weight">Weight</string>
+    <string name="height">height</string>
+    <string name="password">Password</string>
+    <string name="submit">Submit</string>
+    <string name="loginProfile">Choose a profile</string>
+    <string name="back">Go back</string>
+    <string name="temps">Time</string>
     <string name="chrono">00:00:00</string>
     <string name="_12_km">12 km</string>
     <string name="chrono2">00:00:00</string>
-    <string name="activit_s_r_centes">Activités récentes</string>
-    <string name="prenom">Prenom</string>
+    <string name="activit_s_r_centes">Recent activities</string>
+    <string name="prenom">Firstname</string>
     <string name="btnprofil">btnProfil</string>
     <string name="voir_plus">Voir plus</string>
-    <string name="il_y_a_x_jours">Il y a x jours</string>
-    <string name="cette_semaine">Cette semaine</string>
+    <string name="il_y_a_x_jours">x days ago</string>
+    <string name="cette_semaine">This week</string>
     <string name="distance2">Distance</string>
     <string name="distSemaine">0 km</string>
     <string name="imagerunning">imageRunning</string>
-    <string name="plus_de_details">Plus de details</string>
-    <string name="nom">Nom</string>
-    <string name="sexe">Sexe</string>
+    <string name="plus_de_details">More details</string>
+    <string name="nom">Lastname</string>
+    <string name="sexe">Sex</string>
     <string name="naissance">JJ/MM/AAAA</string>
-    <string name="location">Localisation</string>
+    <string name="location">Location</string>
     <string name="locationinput">locationInput</string>
-    <string name="poids">Poids</string>
+    <string name="poids">Weight</string>
     <string name="poidsinput">poidsInput</string>
     <string name="tailleinput">tailleInput</string>
-    <string name="taille">Taille</string>
-    <string name="photo">photo</string>
-    <string name="retour">Retour</string>
-
+    <string name="taille">Height</string>
+    <string name="photo">Picture</string>
+    <string name="retour">Go back</string>
 </resources>

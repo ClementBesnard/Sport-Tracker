@@ -90,7 +90,7 @@ public final class RunningContract {
                         Activity._ID + " INTEGER PRIMARY KEY," +
                         Activity.COLUMN_NAME_DURATION + " INT," +
                         Activity.COLUMN_NAME_DISTANCE + " REAL," +
-                        Activity.COLUMN_NAME_CALORIES + " INT," +
+                        Activity.COLUMN_NAME_CALORIES + " REAL," +
                         Activity.COLUMN_NAME_DATE + " TEXT," +
                         Activity.COLUMN_NAME_PROFILE_ID + " INTEGER," +
                         Activity.COLUMN_NAME_ITINERARY_ID + " INTEGER," +
